@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Editors
+*.stTheme.cache
+*.sublime-workspace
+*.tmlanguage.cache
+*.tmPreferences.cache
+._*
+.AppleDouble
+.DS_Store
+.LSOverride
+.idea
+.vscode/settings.json
