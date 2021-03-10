@@ -1,0 +1,11 @@
+django
+djangorestframework
+django-helusers
+drf-oidc-auth<1.0.0
+factory_boy
+pytest
+pytest-cov
+pytest-django
+python-jose
+requests-mock
+snapshottest
