@@ -1,5 +1,9 @@
 # Helsinki profile GDPR API
 
+[![CI workflow](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/actions/workflows/ci.yml?query=branch:main)
+[![codecov](https://codecov.io/gh/City-of-Helsinki/helsinki-profile-gdpr-api/branch/main/graph/badge.svg)](https://codecov.io/gh/City-of-Helsinki/helsinki-profile-gdpr-api)
+[![PyPI](https://badgen.net/pypi/v/helsinki-profile-gdpr-api)](https://pypi.org/project/helsinki-profile-gdpr-api/)
+
 Django app for implementing Helsinki profile GDPR API.
 
 This library will allow a service using Helsinki profile to implement the GDPR
