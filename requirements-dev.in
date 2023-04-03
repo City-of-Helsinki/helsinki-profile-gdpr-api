@@ -3,6 +3,7 @@ djangorestframework
 django-helusers
 drf-oidc-auth<1.0.0
 factory_boy
+pip-tools
 pytest
 pytest-cov
 pytest-django
