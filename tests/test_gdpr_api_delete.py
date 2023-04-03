@@ -142,3 +142,20 @@ def test_gdpr_delete_requires_correct_scope(
         assert response.status_code == 403
         assert Profile.objects.count() == 1
         assert User.objects.count() == 1
+
+
+def test_if_profile_not_found_return_404(
+    api_client, user, uuid_value, requests_mock, settings
+):
+    auth_header = get_api_token_for_user_with_scopes(
+        user, [settings.GDPR_API_DELETE_SCOPE], requests_mock
+    )
+    api_client.credentials(HTTP_AUTHORIZATION=auth_header)
+    response = api_client.delete(
+        reverse(
+            "helsinki_gdpr:gdpr_v1",
+            kwargs={"pk": uuid_value},
+        )
+    )
+
+    assert response.status_code == 404

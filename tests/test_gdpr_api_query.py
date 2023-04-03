@@ -71,3 +71,20 @@ def test_gdpr_query_requires_correct_scope(
         assert response.status_code == 200
     else:
         assert response.status_code == 403
+
+
+def test_if_profile_not_found_return_404(
+    api_client, user, uuid_value, requests_mock, settings
+):
+    auth_header = get_api_token_for_user_with_scopes(
+        user, [settings.GDPR_API_QUERY_SCOPE], requests_mock
+    )
+    api_client.credentials(HTTP_AUTHORIZATION=auth_header)
+    response = api_client.get(
+        reverse(
+            "helsinki_gdpr:gdpr_v1",
+            kwargs={"pk": uuid_value},
+        )
+    )
+
+    assert response.status_code == 404

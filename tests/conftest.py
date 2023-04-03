@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 import pytest
 from helusers.settings import api_token_auth_settings
@@ -17,6 +18,11 @@ def autouse_db(db):
 @pytest.fixture
 def api_client():
     return APIClient()
+
+
+@pytest.fixture
+def uuid_value():
+    return uuid.uuid4()
 
 
 @pytest.fixture
