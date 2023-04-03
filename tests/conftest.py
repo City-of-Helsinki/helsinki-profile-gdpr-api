@@ -22,3 +22,13 @@ def user():
 @pytest.fixture
 def profile():
     return ProfileFactory()
+
+
+@pytest.fixture(params=["true", "True", "TRUE", "1", 1, True])
+def true_value(request):
+    return request.param
+
+
+@pytest.fixture(params=["false", "False", "FALSE", "0", 0, False])
+def false_value(request):
+    return request.param

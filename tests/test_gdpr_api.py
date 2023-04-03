@@ -11,9 +11,6 @@ from .models import Profile
 
 User = get_user_model()
 
-TRUE_VALUES = ["true", "True", "TRUE", "1", 1, True]
-FALSE_VALUES = ["false", "False", "FALSE", "0", 0, False]
-
 
 def get_api_token_for_user_with_scopes(user, scopes: list, requests_mock):
     """Build a proper auth token with desired scopes."""
@@ -70,7 +67,6 @@ def test_get_profile_information_from_gdpr_api(
     snapshot.assert_match(response.json())
 
 
-@pytest.mark.parametrize("true_value", TRUE_VALUES)
 def test_delete_profile_dry_run_data(
     true_value, api_client, profile, requests_mock, settings
 ):
@@ -89,7 +85,6 @@ def test_delete_profile_dry_run_data(
     assert User.objects.count() == 1
 
 
-@pytest.mark.parametrize("true_value", TRUE_VALUES)
 def test_delete_profile_dry_run_query_params(
     true_value, api_client, profile, requests_mock, settings
 ):
@@ -121,7 +116,6 @@ def test_delete_profile(api_client, profile, requests_mock, settings):
     assert User.objects.count() == 0
 
 
-@pytest.mark.parametrize("false_value", FALSE_VALUES)
 def test_delete_profile_dry_run_query_params_false(
     false_value, api_client, profile, requests_mock, settings
 ):
@@ -139,7 +133,6 @@ def test_delete_profile_dry_run_query_params_false(
     assert User.objects.count() == 0
 
 
-@pytest.mark.parametrize("false_value", FALSE_VALUES)
 def test_delete_profile_dry_run_data_false(
     false_value, api_client, profile, requests_mock, settings
 ):
