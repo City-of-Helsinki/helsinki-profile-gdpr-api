@@ -38,6 +38,21 @@ backend.
     ]
     ```
 
+## Development
+
+It's good to use a Python virtual environment:
+
+    $> python -m venv venv
+    $> source ./venv/bin/activate
+
+Install development dependencies:
+
+    $> pip install -r requirements-dev.txt
+
+Run tests:
+
+    $> pytest
+
 ## Code format
 
 This project uses
