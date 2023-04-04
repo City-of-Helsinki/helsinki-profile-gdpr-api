@@ -1,7 +1,6 @@
 from django.apps import apps
 from django.conf import settings
 from django.db import DatabaseError, transaction
-from django.shortcuts import get_object_or_404
 from helusers.oidc import ApiTokenAuthentication
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException
@@ -50,9 +49,12 @@ class GDPRAPIView(APIView):
     authentication_classes = [ApiTokenAuthentication]
     permission_classes = [GDPRScopesPermission]
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.model = apps.get_model(settings.GDPR_API_MODEL)
+
     def get_object(self) -> SerializableMixin:
-        model = apps.get_model(settings.GDPR_API_MODEL)
-        obj = get_object_or_404(model, pk=self.kwargs["pk"])
+        obj = self.model.objects.get(pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -68,7 +70,10 @@ class GDPRAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         """Retrieve all profile data related to the given id."""
-        return Response(self.get_object().serialize(), status=status.HTTP_200_OK)
+        try:
+            return Response(self.get_object().serialize(), status=status.HTTP_200_OK)
+        except self.model.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request, *args, **kwargs):
         """Delete all data related to the given profile.
@@ -86,6 +91,8 @@ class GDPRAPIView(APIView):
                 obj.delete()
                 user.delete()
                 self.check_dry_run()
+        except self.model.DoesNotExist:
+            pass
         except DryRunException:
             # Deletion is possible. Due to dry run, transaction is rolled back.
             pass

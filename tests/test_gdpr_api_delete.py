@@ -144,7 +144,7 @@ def test_gdpr_delete_requires_correct_scope(
         assert User.objects.count() == 1
 
 
-def test_if_profile_not_found_return_404(
+def test_if_profile_not_found_return_204(
     api_client, user, uuid_value, requests_mock, settings
 ):
     auth_header = get_api_token_for_user_with_scopes(
@@ -158,4 +158,4 @@ def test_if_profile_not_found_return_404(
         )
     )
 
-    assert response.status_code == 404
+    assert response.status_code == 204

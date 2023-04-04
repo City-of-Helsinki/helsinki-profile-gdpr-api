@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Respond with a `204 No Content` status code when no data is found for the requested profile.
+
 ### Removed
 
 - Support for Python 3.6
