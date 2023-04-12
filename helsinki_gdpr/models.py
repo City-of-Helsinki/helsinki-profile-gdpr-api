@@ -79,12 +79,13 @@ class SerializableMixin(models.Model):
         field_name = field_description.get("name")
 
         def _resolve_value():
+            value = getattr(model, field_name)
+
             if "accessor" in field_description:
                 # call the accessor with value as an argument
-                return field_description["accessor"](getattr(model, field_name))
-            else:
-                # no accessor, return the value
-                return getattr(model, field_name)
+                value = field_description["accessor"](value)
+
+            return value
 
         related_types = {item.name: type(item) for item in model._meta.related_objects}
         if field_name in related_types.keys():
