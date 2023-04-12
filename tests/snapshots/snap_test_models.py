@@ -9,7 +9,14 @@ snapshots = Snapshot()
 snapshots["test_model_serialization 1"] = {
     "children": [
         {"key": "MEMO", "value": "Memo"},
-        {"key": "USER", "value": "First name"},
+        {
+            "children": [
+                {"key": "FIRST_NAME", "value": "First name"},
+                {"key": "LAST_NAME", "value": "Last name"},
+            ],
+            "key": "USER",
+        },
+        {"key": "USER", "value": "First name Last name"},
         {
             "children": [
                 {"children": [{"key": "DATA", "value": "Extra"}], "key": "EXTRADATA"}

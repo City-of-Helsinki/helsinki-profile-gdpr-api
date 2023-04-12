@@ -7,8 +7,11 @@ from helusers.models import AbstractUser
 from helsinki_gdpr.models import SerializableMixin
 
 
-class User(AbstractUser):
-    pass
+class User(AbstractUser, SerializableMixin):
+    serialize_fields = (
+        {"name": "first_name"},
+        {"name": "last_name"},
+    )
 
 
 class Profile(SerializableMixin):
@@ -18,7 +21,8 @@ class Profile(SerializableMixin):
 
     serialize_fields = (
         {"name": "memo"},
-        {"name": "user", "accessor": lambda x: x.first_name},
+        {"name": "user"},
+        {"name": "user", "accessor": lambda x: f"{x.first_name} {x.last_name}"},
         {"name": "extra_data"},
     )
 

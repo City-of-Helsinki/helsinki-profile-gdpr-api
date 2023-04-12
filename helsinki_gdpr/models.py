@@ -105,10 +105,15 @@ class SerializableMixin(models.Model):
                     "children": value,
                 }
         else:
-            # concrete field, let's just add the value
+            # concrete field
+            value = _resolve_value()
+
+            if hasattr(value, "serialize"):
+                return value.serialize()
+
             return {
                 "key": field_name.upper(),
-                "value": _resolve_value(),
+                "value": value,
             }
 
     def serialize(self):
