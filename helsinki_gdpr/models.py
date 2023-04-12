@@ -76,35 +76,37 @@ class SerializableMixin(models.Model):
     objects = SerializableManager()
 
     def _resolve_field(self, model, field):
+        field_name = field.get("name")
+
         def _resolve_value(data, field):
             if "accessor" in field:
                 # call the accessor with value as an argument
-                return field["accessor"](getattr(data, field.get("name")))
+                return field["accessor"](getattr(data, field_name))
             else:
                 # no accessor, return the value
-                return getattr(data, field.get("name"))
+                return getattr(data, field_name)
 
         related_types = {item.name: type(item) for item in model._meta.related_objects}
-        if field.get("name") in related_types.keys():
+        if field_name in related_types.keys():
             value = (
-                getattr(model, field.get("name")).serialize()
-                if hasattr(model, field.get("name"))
-                and hasattr(getattr(model, field.get("name")), "serialize")
+                getattr(model, field_name).serialize()
+                if hasattr(model, field_name)
+                and hasattr(getattr(model, field_name), "serialize")
                 else None
             )
             # field is a related object, let's serialize more
-            if related_types[field.get("name")] == OneToOneRel:
+            if related_types[field_name] == OneToOneRel:
                 # do not wrap one-to-one relations into list
                 return value
             else:
                 return {
-                    "key": field.get("name").upper(),
+                    "key": field_name.upper(),
                     "children": value,
                 }
         else:
             # concrete field, let's just add the value
             return {
-                "key": field.get("name").upper(),
+                "key": field_name.upper(),
                 "value": _resolve_value(model, field),
             }
 
