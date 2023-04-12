@@ -81,3 +81,11 @@ def get_api_token_for_user_with_scopes(user, scopes: list, requests_mock):
     auth_header = f"{api_token_auth_settings.AUTH_SCHEME} {encoded_jwt}"
 
     return auth_header
+
+
+def model_lookup_that_returns_none(model, instance_id):
+    return model.objects.filter(user__uuid=instance_id).first()
+
+
+def model_lookup_that_throws_exception(model, instance_id):
+    return model.objects.get(user__uuid=instance_id)

@@ -1,3 +1,4 @@
+import pytest
 import requests_mock
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -60,3 +61,28 @@ def test_model_lookup_can_be_configured_to_a_field(profile, snapshot, settings):
 
     assert response.status_code == 200
     snapshot.assert_match(response.json())
+
+
+@pytest.mark.parametrize("finds_instance", (True, False))
+@pytest.mark.parametrize(
+    "lookup_function",
+    ("model_lookup_that_returns_none", "model_lookup_that_throws_exception"),
+)
+def test_model_lookup_can_be_configured_to_a_function(
+    finds_instance,
+    lookup_function,
+    uuid_value,
+    profile,
+    snapshot,
+    settings,
+):
+    settings.GDPR_API_MODEL_LOOKUP = f"tests.conftest.{lookup_function}"
+
+    instance_id = profile.user.uuid if finds_instance else uuid_value
+    response = do_query(profile.user, instance_id)
+
+    if finds_instance:
+        assert response.status_code == 200
+        snapshot.assert_match(response.json())
+    else:
+        assert response.status_code == 204

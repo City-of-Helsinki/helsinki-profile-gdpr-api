@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.conf import settings
 from django.db import DatabaseError, transaction
+from django.utils.module_loading import import_string
 from helusers.oidc import ApiTokenAuthentication
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException
@@ -24,6 +25,17 @@ class DryRunException(Exception):
 
 class DryRunSerializer(serializers.Serializer):
     dry_run = serializers.BooleanField(required=False, default=False)
+
+
+def _try_setting_import(setting_name):
+    setting_value = getattr(settings, setting_name, None)
+    if setting_value:
+        try:
+            return import_string(setting_value)
+        except ImportError:
+            pass
+
+    return setting_value
 
 
 class GDPRScopesPermission(IsAuthenticated):
@@ -52,11 +64,23 @@ class GDPRAPIView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = apps.get_model(settings.GDPR_API_MODEL)
-        self.model_lookup = getattr(settings, "GDPR_API_MODEL_LOOKUP", "pk")
+
+        custom_model_lookup = _try_setting_import("GDPR_API_MODEL_LOOKUP")
+        if callable(custom_model_lookup):
+            self.model_lookup = custom_model_lookup
+        else:
+            lookup_key = custom_model_lookup or "pk"
+
+            def model_lookup(model, instance_id):
+                field_lookups = {lookup_key: instance_id}
+                return model.objects.get(**field_lookups)
+
+            self.model_lookup = model_lookup
 
     def get_object(self) -> SerializableMixin:
-        field_lookups = {self.model_lookup: self.kwargs["pk"]}
-        obj = self.model.objects.get(**field_lookups)
+        obj = self.model_lookup(self.model, self.kwargs["pk"])
+        if obj is None:
+            raise self.model.DoesNotExist()
         self.check_object_permissions(self.request, obj)
         return obj
 

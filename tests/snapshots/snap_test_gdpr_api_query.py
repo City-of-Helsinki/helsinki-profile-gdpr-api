@@ -37,3 +37,39 @@ snapshots["test_model_lookup_can_be_configured_to_a_field 1"] = {
     ],
     "key": "PROFILE",
 }
+
+snapshots[
+    "test_model_lookup_can_be_configured_to_a_function[model_lookup_that_returns_none-True] 1"
+] = {
+    "children": [
+        {"key": "MEMO", "value": "Memo"},
+        {
+            "children": [
+                {"key": "FIRST_NAME", "value": "First name"},
+                {"key": "LAST_NAME", "value": "Last name"},
+            ],
+            "key": "USER",
+        },
+        {"key": "USER", "value": "First name Last name"},
+        {"children": [], "key": "EXTRA_DATA"},
+    ],
+    "key": "PROFILE",
+}
+
+snapshots[
+    "test_model_lookup_can_be_configured_to_a_function[model_lookup_that_throws_exception-True] 1"
+] = {
+    "children": [
+        {"key": "MEMO", "value": "Memo"},
+        {
+            "children": [
+                {"key": "FIRST_NAME", "value": "First name"},
+                {"key": "LAST_NAME", "value": "Last name"},
+            ],
+            "key": "USER",
+        },
+        {"key": "USER", "value": "First name Last name"},
+        {"children": [], "key": "EXTRA_DATA"},
+    ],
+    "key": "PROFILE",
+}

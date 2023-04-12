@@ -59,6 +59,14 @@ obj = model.objects.get(pk=id)
 If `pk` is not the correct field lookup to use, set the setting `GDPR_API_MODEL_LOOKUP` to the correct
 value, for example `user__uuid`.
 
+If changing the field lookup that way doesn't solve the model instance searching, it's also possible to
+set the `GDPR_API_MODEL_LOOKUP` setting to an import path to a function, for example
+`myapp.gdpr.get_model_instance`. The function gets called whenever the GDPR API is accessed and the model
+instance is needed. The function gets two arguments, the model class specified by the `GDPR_API_MODEL`
+setting and the id from the GDPR API request's path. The function must return an instance of the model
+specified by the `GDPR_API_MODEL` setting, if an instance is found. If no instance is found, then the
+function must either return `None` or raise a `DoesNotExist` exception of the model.
+
 ## Development
 
 It's good to use a Python virtual environment:

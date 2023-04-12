@@ -1,5 +1,6 @@
 import urllib
 
+import pytest
 import requests_mock
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -120,3 +121,30 @@ def test_model_lookup_can_be_configured_to_a_field(profile, settings):
     assert response.status_code == 204
     assert Profile.objects.count() == 0
     assert User.objects.count() == 0
+
+
+@pytest.mark.parametrize("finds_instance", (True, False))
+@pytest.mark.parametrize(
+    "lookup_function",
+    ("model_lookup_that_returns_none", "model_lookup_that_throws_exception"),
+)
+def test_model_lookup_can_be_configured_to_a_function(
+    finds_instance,
+    lookup_function,
+    uuid_value,
+    profile,
+    settings,
+):
+    settings.GDPR_API_MODEL_LOOKUP = f"tests.conftest.{lookup_function}"
+
+    instance_id = profile.user.uuid if finds_instance else uuid_value
+    response = do_delete(profile.user, instance_id)
+
+    assert response.status_code == 204
+
+    if finds_instance:
+        assert Profile.objects.count() == 0
+        assert User.objects.count() == 0
+    else:
+        assert Profile.objects.count() == 1
+        assert User.objects.count() == 1
