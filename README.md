@@ -38,6 +38,27 @@ backend.
     ]
     ```
 
+## Configurability
+
+The configuration above is the minimum needed. With those the app uses the default behaviour.
+The app can also be configured in various ways if the default behaviour is not appropriate.
+
+### Searching the model instance
+
+By default the `GDPR_API_MODEL` is searched with its primary key, something like this:
+
+```python
+from django.apps import apps
+from django.conf import settings
+
+model = apps.get_model(settings.GDPR_API_MODEL)
+# The `id` is extracted from the request's URL
+obj = model.objects.get(pk=id)
+```
+
+If `pk` is not the correct field lookup to use, set the setting `GDPR_API_MODEL_LOOKUP` to the correct
+value, for example `user__uuid`.
+
 ## Development
 
 It's good to use a Python virtual environment:

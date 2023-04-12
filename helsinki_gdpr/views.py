@@ -52,9 +52,11 @@ class GDPRAPIView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = apps.get_model(settings.GDPR_API_MODEL)
+        self.model_lookup = getattr(settings, "GDPR_API_MODEL_LOOKUP", "pk")
 
     def get_object(self) -> SerializableMixin:
-        obj = self.model.objects.get(pk=self.kwargs["pk"])
+        field_lookups = {self.model_lookup: self.kwargs["pk"]}
+        obj = self.model.objects.get(**field_lookups)
         self.check_object_permissions(self.request, obj)
         return obj
 

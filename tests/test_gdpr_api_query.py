@@ -51,3 +51,12 @@ def test_if_profile_not_found_return_204(user, uuid_value):
     response = do_query(user, uuid_value)
 
     assert response.status_code == 204
+
+
+def test_model_lookup_can_be_configured_to_a_field(profile, snapshot, settings):
+    settings.GDPR_API_MODEL_LOOKUP = "user__uuid"
+
+    response = do_query(profile.user, profile.user.uuid)
+
+    assert response.status_code == 200
+    snapshot.assert_match(response.json())

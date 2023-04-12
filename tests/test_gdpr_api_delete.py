@@ -110,3 +110,13 @@ def test_if_profile_not_found_return_204(user, uuid_value):
     response = do_delete(user, uuid_value)
 
     assert response.status_code == 204
+
+
+def test_model_lookup_can_be_configured_to_a_field(profile, settings):
+    settings.GDPR_API_MODEL_LOOKUP = "user__uuid"
+
+    response = do_delete(profile.user, profile.user.uuid)
+
+    assert response.status_code == 204
+    assert Profile.objects.count() == 0
+    assert User.objects.count() == 0
