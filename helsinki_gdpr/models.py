@@ -78,13 +78,13 @@ class SerializableMixin(models.Model):
     def _resolve_field(self, model, field_description):
         field_name = field_description.get("name")
 
-        def _resolve_value(data, field):
-            if "accessor" in field:
+        def _resolve_value():
+            if "accessor" in field_description:
                 # call the accessor with value as an argument
-                return field["accessor"](getattr(data, field_name))
+                return field_description["accessor"](getattr(model, field_name))
             else:
                 # no accessor, return the value
-                return getattr(data, field_name)
+                return getattr(model, field_name)
 
         related_types = {item.name: type(item) for item in model._meta.related_objects}
         if field_name in related_types.keys():
@@ -107,7 +107,7 @@ class SerializableMixin(models.Model):
             # concrete field, let's just add the value
             return {
                 "key": field_name.upper(),
-                "value": _resolve_value(model, field_description),
+                "value": _resolve_value(),
             }
 
     def serialize(self):
