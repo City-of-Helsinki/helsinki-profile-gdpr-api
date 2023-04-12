@@ -113,9 +113,13 @@ class SerializableMixin(models.Model):
     def serialize(self):
         return {
             "key": self._meta.model_name.upper(),
-            "children": [
-                self._resolve_field(self, field_description)
-                for field_description in self.serialize_fields
-                if self._resolve_field(self, field_description) is not None
-            ],
+            "children": list(
+                filter(
+                    lambda x: x is not None,
+                    [
+                        self._resolve_field(self, field_description)
+                        for field_description in self.serialize_fields
+                    ],
+                )
+            ),
         }
