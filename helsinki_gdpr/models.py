@@ -75,8 +75,8 @@ class SerializableMixin(models.Model):
 
     objects = SerializableManager()
 
-    def _resolve_field(self, model, field):
-        field_name = field.get("name")
+    def _resolve_field(self, model, field_description):
+        field_name = field_description.get("name")
 
         def _resolve_value(data, field):
             if "accessor" in field:
@@ -107,15 +107,15 @@ class SerializableMixin(models.Model):
             # concrete field, let's just add the value
             return {
                 "key": field_name.upper(),
-                "value": _resolve_value(model, field),
+                "value": _resolve_value(model, field_description),
             }
 
     def serialize(self):
         return {
             "key": self._meta.model_name.upper(),
             "children": [
-                self._resolve_field(self, field)
-                for field in self.serialize_fields
-                if self._resolve_field(self, field) is not None
+                self._resolve_field(self, field_description)
+                for field_description in self.serialize_fields
+                if self._resolve_field(self, field_description) is not None
             ],
         }
