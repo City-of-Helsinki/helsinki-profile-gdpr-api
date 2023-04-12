@@ -8,8 +8,8 @@ User = get_user_model()
 
 class UserFactory(factory.django.DjangoModelFactory):
     uuid = factory.Faker("uuid4", cast_to=None)
-    first_name = factory.Faker("first_name")
-    last_name = factory.Faker("last_name")
+    first_name = "First name"
+    last_name = "Last name"
     email = factory.Faker("email")
 
     class Meta:

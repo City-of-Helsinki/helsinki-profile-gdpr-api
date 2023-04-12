@@ -9,7 +9,7 @@ snapshots = Snapshot()
 snapshots["test_get_profile_information_from_gdpr_api 1"] = {
     "children": [
         {"key": "MEMO", "value": "Memo"},
-        {"key": "USER", "value": "First"},
+        {"key": "USER", "value": "First name"},
         {"children": [], "key": "EXTRA_DATA"},
     ],
     "key": "PROFILE",

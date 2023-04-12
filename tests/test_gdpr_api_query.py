@@ -10,8 +10,6 @@ User = get_user_model()
 def test_get_profile_information_from_gdpr_api(
     api_client, profile, snapshot, requests_mock, settings
 ):
-    profile.user.first_name = "First"
-    profile.user.save()
     auth_header = get_api_token_for_user_with_scopes(
         profile.user, [settings.GDPR_API_QUERY_SCOPE], requests_mock
     )
