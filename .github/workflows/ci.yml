@@ -32,13 +32,13 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: |
-          pip install -r requirements-dev.txt codecov
+          pip install -r requirements-dev.txt pytest-cov
           pip install -e .
       - name: Run tests
         run: pytest -ra -vv --doctest-modules --cov=.
 
-      - name: Coverage
-        run: codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
 
   build:
     name: Build package
