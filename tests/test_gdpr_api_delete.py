@@ -8,6 +8,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from tests.conftest import get_api_token_for_user_with_scopes
+from tests.factories import ExtraDataFactory
 
 from .models import Profile
 
@@ -148,3 +149,17 @@ def test_model_lookup_can_be_configured_to_a_function(
     else:
         assert Profile.objects.count() == 1
         assert User.objects.count() == 1
+
+
+def test_user_provider_function_can_be_configured(profile, settings):
+    ExtraDataFactory(profile=profile)
+
+    settings.GDPR_API_MODEL = "tests.ExtraData"
+    settings.GDPR_API_MODEL_LOOKUP = "profile__id"
+    settings.GDPR_API_USER_PROVIDER = "tests.conftest.get_user_from_extra_data"
+
+    response = do_delete(profile.user, profile.id)
+
+    assert response.status_code == 204
+    assert Profile.objects.count() == 0
+    assert User.objects.count() == 0

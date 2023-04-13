@@ -38,6 +38,14 @@ def _try_setting_import(setting_name):
     return setting_value
 
 
+def _user_from_obj(obj):
+    user_provider = _try_setting_import("GDPR_API_USER_PROVIDER")
+    if callable(user_provider):
+        return user_provider(obj)
+
+    return getattr(obj, "user", None)
+
+
 class GDPRScopesPermission(IsAuthenticated):
     def has_permission(self, request, view):
         authenticated = super().has_permission(request, view)
@@ -49,9 +57,7 @@ class GDPRScopesPermission(IsAuthenticated):
         return False
 
     def has_object_permission(self, request, view, obj):
-        if obj.user:
-            return request.user == obj.user
-        return False
+        return request.user == _user_from_obj(obj)
 
 
 class GDPRAPIView(APIView):
@@ -113,9 +119,10 @@ class GDPRAPIView(APIView):
         try:
             with transaction.atomic():
                 obj = self.get_object()
-                user = obj.user
+                user = _user_from_obj(obj)
                 obj.delete()
-                user.delete()
+                if user:
+                    user.delete()
                 self.check_dry_run()
         except self.model.DoesNotExist:
             pass

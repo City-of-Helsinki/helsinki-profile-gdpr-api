@@ -73,3 +73,8 @@ snapshots[
     ],
     "key": "PROFILE",
 }
+
+snapshots["test_user_provider_function_can_be_configured 1"] = {
+    "children": [{"key": "DATA", "value": "Extra"}],
+    "key": "EXTRADATA",
+}

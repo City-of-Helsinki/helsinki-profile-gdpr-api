@@ -5,6 +5,7 @@
 ### Added
 
 - `GDPR_API_MODEL_LOOKUP` setting for configuring how the GDPR model instance is found.
+- `GDPR_API_USER_PROVIDER` setting for configuring how to obtain a `User` instance from the GDPR model instance.
 
 ### Changed
 

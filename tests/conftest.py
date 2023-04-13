@@ -89,3 +89,7 @@ def model_lookup_that_returns_none(model, instance_id):
 
 def model_lookup_that_throws_exception(model, instance_id):
     return model.objects.get(user__uuid=instance_id)
+
+
+def get_user_from_extra_data(extra_data):
+    return extra_data.profile.user

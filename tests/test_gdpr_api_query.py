@@ -6,6 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from tests.conftest import get_api_token_for_user_with_scopes
+from tests.factories import ExtraDataFactory
 
 User = get_user_model()
 
@@ -86,3 +87,16 @@ def test_model_lookup_can_be_configured_to_a_function(
         snapshot.assert_match(response.json())
     else:
         assert response.status_code == 204
+
+
+def test_user_provider_function_can_be_configured(profile, snapshot, settings):
+    ExtraDataFactory(profile=profile)
+
+    settings.GDPR_API_MODEL = "tests.ExtraData"
+    settings.GDPR_API_MODEL_LOOKUP = "profile__id"
+    settings.GDPR_API_USER_PROVIDER = "tests.conftest.get_user_from_extra_data"
+
+    response = do_query(profile.user, profile.id)
+
+    assert response.status_code == 200
+    snapshot.assert_match(response.json())

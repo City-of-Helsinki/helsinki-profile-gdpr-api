@@ -67,6 +67,14 @@ setting and the id from the GDPR API request's path. The function must return an
 specified by the `GDPR_API_MODEL` setting, if an instance is found. If no instance is found, then the
 function must either return `None` or raise a `DoesNotExist` exception of the model.
 
+### Obtaining a User model instance
+
+It's required that a `User` model instance can be obtained from the GDPR API model instance specified by
+the `GDPR_API_MODEL` setting. By default the GDPR API model instance's `user` attribute is tried. If that
+doesn't work, it's possible to configure a function that will provide the `User` instance. This is
+achieved by setting the import path of the function to the `GDPR_API_USER_PROVIDER` setting, for example
+`myapp.gdpr.get_user`. The function gets the GDPR API model instance as an argument.
+
 ## Development
 
 It's good to use a Python virtual environment:
