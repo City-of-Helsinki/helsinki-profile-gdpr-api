@@ -1,7 +1,7 @@
 import uuid
 
 from django.conf import settings
-from django.db import models
+from django.db import DatabaseError, models
 from helusers.models import AbstractUser
 
 from helsinki_gdpr.models import SerializableMixin
@@ -25,6 +25,11 @@ class Profile(SerializableMixin):
         {"name": "user", "accessor": lambda x: f"{x.first_name} {x.last_name}"},
         {"name": "extra_data"},
     )
+
+    def delete(self, **kwargs):
+        if self.memo == "nodelete":
+            raise DatabaseError()
+        return super().delete(**kwargs)
 
 
 class ExtraData(SerializableMixin):

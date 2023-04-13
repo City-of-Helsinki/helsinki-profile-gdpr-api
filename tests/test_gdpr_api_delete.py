@@ -85,6 +85,17 @@ def test_delete_profile_dry_run_data_false(false_value, profile):
     assert User.objects.count() == 0
 
 
+def test_deletion_forbidden(profile):
+    profile.memo = "nodelete"
+    profile.save()
+
+    response = do_delete(profile.user, profile.id)
+
+    assert response.status_code == 403
+    assert Profile.objects.count() == 1
+    assert User.objects.count() == 1
+
+
 def test_gdpr_api_requires_authentication(api_client, profile):
     response = api_client.delete(
         reverse("helsinki_gdpr:gdpr_v1", kwargs={"pk": profile.id})
