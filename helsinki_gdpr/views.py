@@ -4,19 +4,12 @@ from django.db import DatabaseError, transaction
 from django.utils.module_loading import import_string
 from helusers.oidc import ApiTokenAuthentication
 from rest_framework import serializers, status
-from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from helsinki_gdpr.models import SerializableMixin
-
-
-class DeletionNotAllowed(APIException):
-    status_code = 403
-    default_detail = "Profile cannot be deleted."
-    default_code = "deletion_not_allowed"
 
 
 class DryRunException(Exception):
@@ -130,6 +123,6 @@ class GDPRAPIView(APIView):
             # Deletion is possible. Due to dry run, transaction is rolled back.
             pass
         except DatabaseError:
-            raise DeletionNotAllowed()
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         return Response(status=status.HTTP_204_NO_CONTENT)

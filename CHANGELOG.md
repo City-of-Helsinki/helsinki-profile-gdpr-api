@@ -14,6 +14,8 @@
 ### Removed
 
 - Support for Python 3.6
+- `helsinki_gdpr.views.DeletionNotAllowed` exception class. Raising that exception produced responses with
+  contents that are against the GDPR API specification.
 
 ## 0.1.0 - 2021-03-15
 

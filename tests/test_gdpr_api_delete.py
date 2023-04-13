@@ -92,6 +92,7 @@ def test_deletion_forbidden(profile):
     response = do_delete(profile.user, profile.id)
 
     assert response.status_code == 403
+    assert len(response.content) == 0
     assert Profile.objects.count() == 1
     assert User.objects.count() == 1
 
