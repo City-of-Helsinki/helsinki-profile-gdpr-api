@@ -6,6 +6,7 @@
 
 - `GDPR_API_MODEL_LOOKUP` setting for configuring how the GDPR model instance is found.
 - `GDPR_API_USER_PROVIDER` setting for configuring how to obtain a `User` instance from the GDPR model instance.
+- `GDPR_API_DELETER` setting for configuring how data deletion is performed.
 
 ### Changed
 
@@ -15,7 +16,8 @@
 
 - Support for Python 3.6
 - `helsinki_gdpr.views.DeletionNotAllowed` exception class. Raising that exception produced responses with
-  contents that are against the GDPR API specification.
+  contents that are against the GDPR API specification. A user specified function configured with the
+  `GDPR_API_DELETER` setting should be used instead.
 
 ## 0.1.0 - 2021-03-15
 

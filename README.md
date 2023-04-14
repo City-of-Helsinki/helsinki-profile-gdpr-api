@@ -75,6 +75,21 @@ doesn't work, it's possible to configure a function that will provide the `User`
 achieved by setting the import path of the function to the `GDPR_API_USER_PROVIDER` setting, for example
 `myapp.gdpr.get_user`. The function gets the GDPR API model instance as an argument.
 
+### Controlling how data deletion is performed
+
+By default the GDPR delete operation deletes the `GDPR_API_MODEL` instance and the related `User`
+instance. If that procedure isn't sufficient for the project, it's possible to override the data deletion
+operation. This is achieved by setting the `GDPR_API_DELETER` setting to an import path to a function, for
+example `myapp.gdpr.delete_data`. The function gets two arguments, the `GDPR_API_MODEL` instance and a
+boolean value indicating if this is a dry run or not.
+
+The function gets called within a database transaction, which gets automatically rolled back if it's a dry
+run operation. Thus the function is free to do database modifications even in the dry run case. All
+changes get rolled back afterwards. If it's not a dry run case, then the transaction is committed and all
+changes to the database are persisted.
+
+If the data deletion isn't allowed, the function must raise a `django.db.DatabaseError` exception.
+
 ## Development
 
 It's good to use a Python virtual environment:

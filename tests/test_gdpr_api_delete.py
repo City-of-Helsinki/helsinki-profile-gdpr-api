@@ -175,3 +175,19 @@ def test_user_provider_function_can_be_configured(profile, settings):
     assert response.status_code == 204
     assert Profile.objects.count() == 0
     assert User.objects.count() == 0
+
+
+def anonymising_deleter(profile, is_dry_run):
+    profile.memo = "anonymised"
+    profile.save()
+
+
+def test_deleter_function_can_be_configured(profile, settings):
+    settings.GDPR_API_DELETER = "tests.test_gdpr_api_delete.anonymising_deleter"
+
+    response = do_delete(profile.user, profile.id)
+
+    assert response.status_code == 204
+    profile = Profile.objects.get()
+    assert profile.memo == "anonymised"
+    assert User.objects.count() == 1

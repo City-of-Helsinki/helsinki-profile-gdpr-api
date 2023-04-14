@@ -39,6 +39,13 @@ def _user_from_obj(obj):
     return getattr(obj, "user", None)
 
 
+def _default_deleter(obj, dry_run):
+    user = _user_from_obj(obj)
+    obj.delete()
+    if user:
+        user.delete()
+
+
 class GDPRScopesPermission(IsAuthenticated):
     def has_permission(self, request, view):
         authenticated = super().has_permission(request, view)
@@ -83,15 +90,14 @@ class GDPRAPIView(APIView):
         self.check_object_permissions(self.request, obj)
         return obj
 
-    def check_dry_run(self):
+    def is_dry_run(self):
         """Check if parameters provided to the view indicate it's being used for dry_run."""
         data = DryRunSerializer(data=self.request.data)
         query = DryRunSerializer(data=self.request.query_params)
         data.is_valid()
         query.is_valid()
 
-        if data.validated_data["dry_run"] or query.validated_data["dry_run"]:
-            raise DryRunException()
+        return data.validated_data["dry_run"] or query.validated_data["dry_run"]
 
     def get(self, request, *args, **kwargs):
         """Retrieve all profile data related to the given id."""
@@ -109,14 +115,19 @@ class GDPRAPIView(APIView):
         Dry run delete is expected to always give the same end result as the proper delete i.e. if
         dry run indicated deleting is OK, the proper delete should be OK too.
         """
+        deleter = _try_setting_import("GDPR_API_DELETER")
+
+        if not callable(deleter):
+            deleter = _default_deleter
+
+        dry_run = self.is_dry_run()
+
         try:
             with transaction.atomic():
                 obj = self.get_object()
-                user = _user_from_obj(obj)
-                obj.delete()
-                if user:
-                    user.delete()
-                self.check_dry_run()
+                deleter(obj, dry_run)
+                if dry_run:
+                    raise DryRunException()
         except self.model.DoesNotExist:
             pass
         except DryRunException:
