@@ -88,7 +88,11 @@ run operation. Thus the function is free to do database modifications even in th
 changes get rolled back afterwards. If it's not a dry run case, then the transaction is committed and all
 changes to the database are persisted.
 
-If the data deletion isn't allowed, the function must raise a `django.db.DatabaseError` exception.
+If the data deletion isn't allowed, the function has two ways to indicate this:
+
+- Return a `helsinki_gdpr.types.ErrorResponse` instance. This allows also communicating the reasons
+  why the deletion isn't allowed.
+- Raise a `django.db.DatabaseError` exception.
 
 ## Development
 

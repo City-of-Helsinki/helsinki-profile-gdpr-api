@@ -1,4 +1,5 @@
 import urllib
+from typing import Optional
 
 import pytest
 import requests_mock
@@ -7,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
 
+from helsinki_gdpr.types import Error, ErrorResponse
 from tests.conftest import get_api_token_for_user_with_scopes
 from tests.factories import ExtraDataFactory
 
@@ -191,3 +193,22 @@ def test_deleter_function_can_be_configured(profile, settings):
     profile = Profile.objects.get()
     assert profile.memo == "anonymised"
     assert User.objects.count() == 1
+
+
+def error_returning_deleter(profile, is_dry_run) -> Optional[ErrorResponse]:
+    return ErrorResponse(
+        [Error("NO_GO", {"en": "Can't do", "fi": "Ei pysty", "sv": "Kan inte"})]
+    )
+
+
+def test_deleter_function_can_provide_errors(profile, settings, snapshot):
+    settings.GDPR_API_DELETER = "tests.test_gdpr_api_delete.error_returning_deleter"
+
+    response = do_delete(profile.user, profile.id)
+
+    assert response.status_code == 403
+    assert Profile.objects.count() == 1
+    assert User.objects.count() == 1
+
+    assert response["Content-Type"] == "application/json"
+    snapshot.assert_match(response.json())

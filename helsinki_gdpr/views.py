@@ -1,3 +1,5 @@
+import dataclasses
+
 from django.apps import apps
 from django.conf import settings
 from django.db import DatabaseError, transaction
@@ -10,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from helsinki_gdpr.models import SerializableMixin
+from helsinki_gdpr.types import ErrorResponse
 
 
 class DryRunException(Exception):
@@ -115,6 +118,10 @@ class GDPRAPIView(APIView):
         Dry run delete is expected to always give the same end result as the proper delete i.e. if
         dry run indicated deleting is OK, the proper delete should be OK too.
         """
+
+        class DeletionDeniedException(Exception):
+            """Indicate that data deletion is denied."""
+
         deleter = _try_setting_import("GDPR_API_DELETER")
 
         if not callable(deleter):
@@ -125,7 +132,9 @@ class GDPRAPIView(APIView):
         try:
             with transaction.atomic():
                 obj = self.get_object()
-                deleter(obj, dry_run)
+                delete_result = deleter(obj, dry_run)
+                if isinstance(delete_result, ErrorResponse):
+                    raise DeletionDeniedException()
                 if dry_run:
                     raise DryRunException()
         except self.model.DoesNotExist:
@@ -133,6 +142,10 @@ class GDPRAPIView(APIView):
         except DryRunException:
             # Deletion is possible. Due to dry run, transaction is rolled back.
             pass
+        except DeletionDeniedException:
+            return Response(
+                data=dataclasses.asdict(delete_result), status=status.HTTP_403_FORBIDDEN
+            )
         except DatabaseError:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
