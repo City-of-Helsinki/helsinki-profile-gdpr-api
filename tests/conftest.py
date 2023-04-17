@@ -1,7 +1,13 @@
 import datetime
+import sys
 import uuid
+from importlib import reload
 
 import pytest
+from django.conf import settings
+from django.core.signals import setting_changed
+from django.dispatch import receiver
+from django.urls import clear_url_caches
 from helusers.settings import api_token_auth_settings
 from jose import jwt
 from rest_framework.test import APIClient
@@ -93,3 +99,15 @@ def model_lookup_that_throws_exception(model, instance_id):
 
 def get_user_from_extra_data(extra_data):
     return extra_data.profile.user
+
+
+@receiver(setting_changed)
+def _reload_url_conf(setting, **kwargs):
+    if setting == "GDPR_API_URL_PATTERN":
+        clear_url_caches()
+
+        if "helsinki_gdpr.urls" in sys.modules:
+            reload(sys.modules["helsinki_gdpr.urls"])
+
+        if settings.ROOT_URLCONF in sys.modules:
+            reload(sys.modules[settings.ROOT_URLCONF])

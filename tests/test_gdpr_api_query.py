@@ -11,14 +11,18 @@ from tests.factories import ExtraDataFactory
 User = get_user_model()
 
 
-def do_query(user, id_value, scopes=(settings.GDPR_API_QUERY_SCOPE,)):
+def do_query(
+    user, id_value, scopes=(settings.GDPR_API_QUERY_SCOPE,), url_id_param_name="pk"
+):
     api_client = APIClient()
 
     with requests_mock.Mocker() as req_mock:
         auth_header = get_api_token_for_user_with_scopes(user, scopes, req_mock)
         api_client.credentials(HTTP_AUTHORIZATION=auth_header)
 
-        return api_client.get(reverse("helsinki_gdpr:gdpr_v1", kwargs={"pk": id_value}))
+        return api_client.get(
+            reverse("helsinki_gdpr:gdpr_v1", kwargs={url_id_param_name: id_value})
+        )
 
 
 def test_get_profile_information_from_gdpr_api(profile, snapshot):
@@ -97,6 +101,15 @@ def test_user_provider_function_can_be_configured(profile, snapshot, settings):
     settings.GDPR_API_USER_PROVIDER = "tests.conftest.get_user_from_extra_data"
 
     response = do_query(profile.user, profile.id)
+
+    assert response.status_code == 200
+    snapshot.assert_match(response.json())
+
+
+def test_gdpr_url_pattern_can_be_configured(profile, snapshot, settings):
+    settings.GDPR_API_URL_PATTERN = "my/own/<uuid:my_id>/pattern"
+
+    response = do_query(profile.user, profile.id, url_id_param_name="my_id")
 
     assert response.status_code == 200
     snapshot.assert_match(response.json())

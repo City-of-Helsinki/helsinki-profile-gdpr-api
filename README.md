@@ -43,6 +43,14 @@ backend.
 The configuration above is the minimum needed. With those the app uses the default behaviour.
 The app can also be configured in various ways if the default behaviour is not appropriate.
 
+### Setting the URL pattern
+
+If GDPR API URLs are setup as explained in the Usage section above, the GDPR URL pattern is
+`gdpr-api/v1/profiles/<uuid:pk>`. The first part (`gdpr-api/`) can be set freely in the URL config. The
+rest (`v1/profiles/<uuid:pk>`) can be controlled with the `GDPR_API_URL_PATTERN` setting. It can be set to
+for example `users/<uuid:user_id>/gdpr`. There needs to be **exactly one** named parameter in the URL
+pattern. Its type needs to be `uuid`, name can be chosen freely.
+
 ### Searching the model instance
 
 By default the `GDPR_API_MODEL` is searched with its primary key, something like this:

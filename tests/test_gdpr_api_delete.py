@@ -23,6 +23,7 @@ def do_delete(
     scopes=(settings.GDPR_API_DELETE_SCOPE,),
     query_params=None,
     data=None,
+    url_id_param_name="pk",
 ):
     api_client = APIClient()
 
@@ -40,7 +41,8 @@ def do_delete(
             request_kwargs["data"] = data
 
         return api_client.delete(
-            reverse("helsinki_gdpr:gdpr_v1", kwargs={"pk": id_value}) + query,
+            reverse("helsinki_gdpr:gdpr_v1", kwargs={url_id_param_name: id_value})
+            + query,
             **request_kwargs,
         )
 
@@ -212,3 +214,13 @@ def test_deleter_function_can_provide_errors(profile, settings, snapshot):
 
     assert response["Content-Type"] == "application/json"
     snapshot.assert_match(response.json())
+
+
+def test_gdpr_url_pattern_can_be_configured(profile, settings):
+    settings.GDPR_API_URL_PATTERN = "my/own/<uuid:my_id>/pattern"
+
+    response = do_delete(profile.user, profile.id, url_id_param_name="my_id")
+
+    assert response.status_code == 204
+    assert Profile.objects.count() == 0
+    assert User.objects.count() == 0

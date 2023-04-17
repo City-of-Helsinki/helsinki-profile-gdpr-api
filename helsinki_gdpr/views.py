@@ -2,6 +2,7 @@ import dataclasses
 
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.db import DatabaseError, transaction
 from django.utils.module_loading import import_string
 from helusers.oidc import ApiTokenAuthentication
@@ -87,7 +88,11 @@ class GDPRAPIView(APIView):
             self.model_lookup = model_lookup
 
     def get_object(self) -> SerializableMixin:
-        obj = self.model_lookup(self.model, self.kwargs["pk"])
+        if len(self.kwargs) != 1:
+            raise ImproperlyConfigured(
+                "GDPR API URL pattern must contain exactly one named argument."
+            )
+        obj = self.model_lookup(self.model, list(self.kwargs.values())[0])
         if obj is None:
             raise self.model.DoesNotExist()
         self.check_object_permissions(self.request, obj)
