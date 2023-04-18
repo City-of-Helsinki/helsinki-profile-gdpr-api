@@ -1,7 +1,7 @@
 django
 djangorestframework
 django-helusers
-drf-oidc-auth<1.0.0
+drf-oidc-auth
 factory_boy
 pip-tools
 pytest
