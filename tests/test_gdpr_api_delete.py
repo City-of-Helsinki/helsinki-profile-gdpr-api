@@ -216,6 +216,23 @@ def test_deleter_function_can_provide_errors(profile, settings, snapshot):
     snapshot.assert_match(response.json())
 
 
+def nonsense_returning_deleter(profile, is_dry_run):
+    return False
+
+
+def test_deleter_function_can_not_return_nonsense(profile, settings, snapshot):
+    settings.GDPR_API_DELETER = "tests.test_gdpr_api_delete.nonsense_returning_deleter"
+
+    response = do_delete(profile.user, profile.id)
+
+    assert response.status_code == 403
+    assert Profile.objects.count() == 1
+    assert User.objects.count() == 1
+
+    assert response["Content-Type"] == "application/json"
+    snapshot.assert_match(response.json())
+
+
 def test_gdpr_url_pattern_can_be_configured(profile, settings):
     settings.GDPR_API_URL_PATTERN = "my/own/<uuid:my_id>/pattern"
 
