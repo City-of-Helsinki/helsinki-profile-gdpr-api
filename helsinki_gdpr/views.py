@@ -1,4 +1,5 @@
 import dataclasses
+import logging
 
 from django.apps import apps
 from django.conf import settings
@@ -13,7 +14,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from helsinki_gdpr.models import SerializableMixin
-from helsinki_gdpr.types import ErrorResponse
+from helsinki_gdpr.types import Error, ErrorResponse
+
+logger = logging.getLogger(__name__)
 
 
 class DryRunException(Exception):
@@ -22,6 +25,16 @@ class DryRunException(Exception):
 
 class DryRunSerializer(serializers.Serializer):
     dry_run = serializers.BooleanField(required=False, default=False)
+
+
+technical_error = Error(
+    "technical_error",
+    {
+        "fi": "Tekninen virhe",
+        "sv": "Teknisk fel",
+        "en": "Technical error",
+    },
+)
 
 
 def _try_setting_import(setting_name):
@@ -138,7 +151,16 @@ class GDPRAPIView(APIView):
             with transaction.atomic():
                 obj = self.get_object()
                 delete_result = deleter(obj, dry_run)
-                if isinstance(delete_result, ErrorResponse):
+                if delete_result is not None:
+                    if isinstance(delete_result, ErrorResponse):
+                        raise DeletionDeniedException()
+
+                    # Prevent deletion with unknown response, as the intent of the
+                    # returned value is not ambiguous.
+                    logger.error(
+                        f"Unknown delete result, expected None or ErrorResponse, got {type(delete_result)}"
+                    )
+                    delete_result = ErrorResponse([technical_error])
                     raise DeletionDeniedException()
                 if dry_run:
                     raise DryRunException()
