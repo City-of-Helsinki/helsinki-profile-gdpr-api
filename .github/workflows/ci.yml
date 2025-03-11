@@ -1,9 +1,13 @@
 name: Continuous integration
 
+env:
+  DEFAULT_PYTHON: 3.9
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   test:
@@ -12,24 +16,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache: "pip"
+          cache-dependency-path: "requirements-dev.txt"
 
-      - name: Cache pip packages
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-pip-modules
-        with:
-          path: ~/.pip-cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt pytest-cov
@@ -45,62 +40,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Install dependencies
         run: pip install -U setuptools wheel build
       - name: Build
         run: python -m build .
 
-  black:
-    name: Coding style - black
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check commitlint
+        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed  # v6.2.1
+
+  pre-commit:
+    name: Run pre-commit hooks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Run black
-        uses: psf/black@stable
+        uses: actions/checkout@v4
+      - name: Setup Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5
         with:
-          args: ". --check"
-
-  flake8:
-    name: Coding style - flake8
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: pip install flake8 pep8-naming flake8-bugbear
-      - name: Run flake8
-        uses: liskin/gh-problem-matcher-wrap@v1
-        with:
-          linters: flake8
-          run: flake8
-
-  isort:
-    name: Coding style - isort
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: pip install isort
-      - name: Run isort
-        uses: liskin/gh-problem-matcher-wrap@v1
-        with:
-          linters: isort
-          run: isort -c .
+          python-version: ${{ env.DEFAULT_PYTHON }}
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
