@@ -19,7 +19,7 @@ from helsinki_gdpr.types import Error, ErrorResponse
 logger = logging.getLogger(__name__)
 
 
-class DryRunException(Exception):
+class DryRunException(Exception):  # noqa: N818
     """Indicate that request is being done as a dry run."""
 
 
@@ -112,7 +112,7 @@ class GDPRAPIView(APIView):
         return obj
 
     def is_dry_run(self):
-        """Check if parameters provided to the view indicate it's being used for dry_run."""
+        """Check if parameters indicate a dry run delete."""
         data = DryRunSerializer(data=self.request.data)
         query = DryRunSerializer(data=self.request.query_params)
         data.is_valid()
@@ -130,14 +130,16 @@ class GDPRAPIView(APIView):
     def delete(self, request, *args, **kwargs):
         """Delete all data related to the given profile.
 
-        Deletes all data related to the given profile id, or just checks if the data can be deleted,
-        depending on the `dry_run` parameter. Raises DeletionNotAllowed if the item
+        Deletes all data related to the given profile id, or just checks if the data
+        can be deleted, depending on the `dry_run` parameter. Raises DeletionNotAllowed
+        if the item
 
-        Dry run delete is expected to always give the same end result as the proper delete i.e. if
-        dry run indicated deleting is OK, the proper delete should be OK too.
+        Dry run delete is expected to always give the same end result as the proper
+        delete i.e. if dry run indicated deleting is OK, the proper delete should be OK
+        too.
         """
 
-        class DeletionDeniedException(Exception):
+        class DeletionDeniedException(Exception):  # noqa: N818
             """Indicate that data deletion is denied."""
 
         deleter = _try_setting_import("GDPR_API_DELETER")
@@ -158,7 +160,8 @@ class GDPRAPIView(APIView):
                     # Prevent deletion with unknown response, as the intent of the
                     # returned value is not ambiguous.
                     logger.error(
-                        f"Unknown delete result, expected None or ErrorResponse, got {type(delete_result)}"
+                        f"Unknown delete result, expected None or ErrorResponse, got "
+                        f"{type(delete_result)}"
                     )
                     delete_result = ErrorResponse([technical_error])
                     raise DeletionDeniedException()
