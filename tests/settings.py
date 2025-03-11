@@ -29,16 +29,16 @@ ROOT_URLCONF = "tests.urls"
 AUTH_USER_MODEL = "tests.User"
 
 GDPR_API_MODEL = "tests.Profile"
-GDPR_API_QUERY_SCOPE = "testprefix.gdprquery"
-GDPR_API_DELETE_SCOPE = "testprefix.gdprdelete"
+GDPR_API_QUERY_SCOPE = "gdprquery"
+GDPR_API_DELETE_SCOPE = "gdprdelete"
 
 DEBUG = True
 USE_TZ = True
 
 OIDC_API_TOKEN_AUTH = {
-    "AUDIENCE": "test_audience",
-    "ISSUER": "https://test_issuer_1",
+    "AUDIENCE": ["test_audience"],
+    "ISSUER": ["https://test_issuer_1"],
     "REQUIRE_API_SCOPE_FOR_AUTHENTICATION": False,
-    "API_AUTHORIZATION_FIELD": "",
+    "API_AUTHORIZATION_FIELD": ["authorization.permissions.scopes"],
     "API_SCOPE_PREFIX": "",
 }
