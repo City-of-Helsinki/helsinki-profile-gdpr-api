@@ -119,16 +119,23 @@ Run tests:
 
 ## Code format
 
-This project uses
-[`black`](https://github.com/ambv/black),
-[`flake8`](https://gitlab.com/pycqa/flake8) and
-[`isort`](https://github.com/timothycrosley/isort)
-for code formatting and quality checking. Project follows the basic black config, without any modifications.
+This project uses [Ruff](https://docs.astral.sh/ruff/) for code formatting and quality checking.
 
-Basic `black` commands:
+Basic `ruff` commands:
 
-* To let `black` do its magic: `black .`
-* To see which files `black` would change: `black --check .`
+* lint: `ruff check`
+* apply safe lint fixes: `ruff check --fix`
+* check formatting: `ruff format --check`
+* format: `ruff format`
 
-[`pre-commit`](https://pre-commit.com/) can be used to install and run all the formatting tools as git hooks
-automatically before a commit.
+[`pre-commit`](https://pre-commit.com/) can be used to install and
+run all the formatting tools as git hooks automatically before a
+commit.
+
+## Commit message format
+
+New commit messages must adhere to the [Conventional Commits](https://www.conventionalcommits.org/)
+specification, and line length is limited to 72 characters.
+
+When [`pre-commit`](https://pre-commit.com/) is in use, [`commitlint`](https://github.com/conventional-changelog/commitlint)
+checks new commit messages for the correct format.
