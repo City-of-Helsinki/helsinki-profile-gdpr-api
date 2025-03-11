@@ -4,17 +4,19 @@ from django.db.models.fields.reverse_related import OneToOneRel
 
 class SerializableMixin(models.Model):
     """
-    Mixin to add custom serialization for django models in order to get the desired tree of models to
-    the downloadable JSON form. It detects relationships automatically (many to many not yet fully
-    supported). Check for the example for more details about the structure.
+    Mixin to add custom serialization for django models in order to get the desired
+    tree of models to the downloadable JSON form. It detects relationships
+    automatically (many to many not yet fully supported). Check for the example for
+    more details about the structure.
 
     Attributes need to be defined in the extending model:
 
     - serialize_fields (required)
         - tuple of dicts:
-            - name (required), name of the field or relation that's going to be added to the serialized object
-            - accessor (optional), function that is called when value of the field is resolved and it takes the
-              actual field value as argument
+            - name (required), name of the field or relation that's going to be added
+              to the serialized object
+            - accessor (optional), function that is called when value of the field is
+              resolved, and it takes the actual field value as argument
 
     Example usage and output:
 
