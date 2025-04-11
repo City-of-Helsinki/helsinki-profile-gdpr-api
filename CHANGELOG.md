@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v0.2.0...v1.0.0) (2025-04-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* delete method must be of type Optional[ErrorList]
+
+### Features
+
+* Enforce delete result for GDPR delete ([3d4ea53](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/3d4ea5365a4fe3cad52e3787e2714d5d4c90248f))
+* Required at least Django 4.2 and Python 3.9 ([03cf602](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/03cf6026209f04dfb75a06d074ccacc77815cc3e))
+
+
+### Documentation
+
+* **readme:** Add ruff and commitlint ([d8a8a66](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/d8a8a66ad1d488e87f5ad2c132bfddb4e2c87b6d))
+
 ## 0.2.0 - 2023-04-18
 
 ### Added
