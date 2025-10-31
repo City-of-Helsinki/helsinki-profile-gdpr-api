@@ -1,5 +1,4 @@
 import urllib
-from typing import Optional
 
 import pytest
 import requests_mock
@@ -197,7 +196,7 @@ def test_deleter_function_can_be_configured(profile, settings):
     assert User.objects.count() == 1
 
 
-def error_returning_deleter(profile, is_dry_run) -> Optional[ErrorResponse]:
+def error_returning_deleter(profile, is_dry_run) -> ErrorResponse | None:
     return ErrorResponse(
         [Error("NO_GO", {"en": "Can't do", "fi": "Ei pysty", "sv": "Kan inte"})]
     )

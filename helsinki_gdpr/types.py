@@ -1,5 +1,5 @@
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import List, Mapping
 
 LocalizedMessage = Mapping[str, str]
 """Human readable error messages localized to various languages: the keys specify
@@ -22,4 +22,4 @@ class Error:
 class ErrorResponse:
     """Response contents for providing a set of errors."""
 
-    errors: List[Error]
+    errors: list[Error]
