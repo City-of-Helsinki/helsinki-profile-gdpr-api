@@ -1,7 +1,7 @@
 name: Continuous integration
 
 env:
-  DEFAULT_PYTHON: 3.9
+  DEFAULT_PYTHON: "3.10"
 
 on:
   push:
