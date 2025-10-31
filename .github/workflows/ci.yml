@@ -10,30 +10,34 @@ on:
     branches: [ main ]
 
 jobs:
+
   test:
-    name: Tests
+    name: Python ${{ matrix.python_version }}
     runs-on: ubuntu-latest
+    env:
+      TOX_POSARGS: -- --cov=. --cov-report=xml -ra -vv
+    strategy:
+      matrix:
+        python_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.DEFAULT_PYTHON }}
-          cache: "pip"
-          cache-dependency-path: "requirements-dev.txt"
+          python-version: ${{ matrix.python_version }}
+          cache: pip
+
+      - name: Upgrade packaging tools
+        run: python -m pip install --upgrade pip setuptools wheel
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements-dev.txt pytest-cov
-          pip install -e .
-      - name: Run tests
-        run: pytest -ra -vv --doctest-modules --cov=.
+        run: python -m pip install --upgrade codecov tox
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Run tox targets for Python ${{ matrix.python_version }}
+        run: tox run -f py$(echo ${{ matrix.python_version }} | tr -d .) ${{ env.TOX_POSARGS }}
 
   build:
     name: Build package
