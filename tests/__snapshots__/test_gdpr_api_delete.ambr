@@ -1,0 +1,29 @@
+# serializer version: 1
+# name: test_deleter_function_can_not_return_nonsense
+  dict({
+    'errors': list([
+      dict({
+        'code': 'technical_error',
+        'message': dict({
+          'en': 'Technical error',
+          'fi': 'Tekninen virhe',
+          'sv': 'Teknisk fel',
+        }),
+      }),
+    ]),
+  })
+# ---
+# name: test_deleter_function_can_provide_errors
+  dict({
+    'errors': list([
+      dict({
+        'code': 'NO_GO',
+        'message': dict({
+          'en': "Can't do",
+          'fi': 'Ei pysty',
+          'sv': 'Kan inte',
+        }),
+      }),
+    ]),
+  })
+# ---

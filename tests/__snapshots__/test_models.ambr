@@ -1,0 +1,43 @@
+# serializer version: 1
+# name: test_model_serialization
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'children': list([
+              dict({
+                'key': 'DATA',
+                'value': 'Extra',
+              }),
+            ]),
+            'key': 'EXTRADATA',
+          }),
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
