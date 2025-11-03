@@ -1,0 +1,177 @@
+# serializer version: 1
+# name: test_gdpr_url_pattern_can_be_configured
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
+# name: test_get_profile_information_from_gdpr_api
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
+# name: test_model_lookup_can_be_configured_to_a_field
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
+# name: test_model_lookup_can_be_configured_to_a_function[model_lookup_that_returns_none-True]
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
+# name: test_model_lookup_can_be_configured_to_a_function[model_lookup_that_throws_exception-True]
+  dict({
+    'children': list([
+      dict({
+        'key': 'MEMO',
+        'value': 'Memo',
+      }),
+      dict({
+        'children': list([
+          dict({
+            'key': 'FIRST_NAME',
+            'value': 'First name',
+          }),
+          dict({
+            'key': 'LAST_NAME',
+            'value': 'Last name',
+          }),
+        ]),
+        'key': 'USER',
+      }),
+      dict({
+        'key': 'USER',
+        'value': 'First name Last name',
+      }),
+      dict({
+        'children': list([
+        ]),
+        'key': 'EXTRA_DATA',
+      }),
+    ]),
+    'key': 'PROFILE',
+  })
+# ---
+# name: test_user_provider_function_can_be_configured
+  dict({
+    'children': list([
+      dict({
+        'key': 'DATA',
+        'value': 'Extra',
+      }),
+    ]),
+    'key': 'EXTRADATA',
+  })
+# ---

@@ -9,4 +9,4 @@ pytest-cov
 pytest-django
 python-jose
 requests-mock
-snapshottest
+syrupy
