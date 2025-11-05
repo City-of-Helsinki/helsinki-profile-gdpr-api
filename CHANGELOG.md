@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.0...v1.0.1) (2025-11-05)
+
+
+### Dependencies
+
+* Add support for Python 3.14, drop support for Python 3.9 ([a4baef8](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/a4baef85942a5cd4e574e23540cd755a7e20715b))
+
 ## [1.0.0](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v0.2.0...v1.0.0) (2025-04-11)
 
 
