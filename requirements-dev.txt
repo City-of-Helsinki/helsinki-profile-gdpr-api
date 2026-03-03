@@ -90,7 +90,7 @@ python-jose==3.4.0
     # via
     #   -r requirements-dev.in
     #   django-helusers
-requests==2.32.3
+requests==2.32.4
     # via
     #   django-helusers
     #   drf-oidc-auth
