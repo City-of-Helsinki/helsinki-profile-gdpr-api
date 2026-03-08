@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.2](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.1...v1.0.2) (2026-03-08)
+
+
+### Dependencies
+
+* Bump authlib from 1.5.1 to 1.6.6 ([b79b57e](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/b79b57ef384fe657270ebc63af90aa050c7563a9))
+* Bump authlib from 1.6.6 to 1.6.7 ([f8bbf7a](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/f8bbf7aa29dbd0a92af41dfd7a7c44dac9c34bad))
+* Bump django from 4.2.20 to 4.2.28 ([b62793f](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/b62793f32fc29f92e14e7ca23aa179c3d1c69be2))
+* Bump django from 4.2.28 to 4.2.29 ([d6f607a](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/d6f607a2b8b8b34937245d378bd7fbf7a210fcb6))
+* Bump requests from 2.32.3 to 2.32.4 ([27eff4d](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/27eff4d233a507b4f7c0abe22fc51e932eb7f4de))
+* Bump sqlparse from 0.5.3 to 0.5.4 ([29aaaae](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/29aaaaec90bee0299ca9dfaed737cc061942c6c8))
+* Bump wheel from 0.45.1 to 0.46.2 ([e08c9d9](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/e08c9d9d7aa74821e5ba1b1e8b56409aa8643c42))
+
 ## [1.0.1](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.0...v1.0.1) (2025-11-05)
 
 
