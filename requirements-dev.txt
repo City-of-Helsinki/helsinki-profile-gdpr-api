@@ -6,7 +6,7 @@
 #
 asgiref==3.8.1
     # via django
-authlib==1.6.7
+authlib==1.6.9
     # via drf-oidc-auth
 build==1.2.2.post1
     # via pip-tools
