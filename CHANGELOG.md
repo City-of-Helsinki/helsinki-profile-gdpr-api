@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.2...v1.0.3) (2026-03-17)
+
+
+### Dependencies
+
+* Bump authlib from 1.6.7 to 1.6.9 ([4cb2ff9](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/4cb2ff9751a5adbf75688b11862046f1632f6151))
+* Bump urllib3 from 2.3.0 to 2.6.3 ([ad15f52](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/ad15f52e6b4fb06430d72ce9e2a8d3087fb1fc87))
+
 ## [1.0.2](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.1...v1.0.2) (2026-03-11)
 
 
