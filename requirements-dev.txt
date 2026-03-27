@@ -44,7 +44,7 @@ djangorestframework==3.15.2
     #   drf-oidc-auth
 drf-oidc-auth==3.0.0
     # via -r requirements-dev.in
-ecdsa==0.19.0
+ecdsa==0.19.2
     # via python-jose
 exceptiongroup==1.2.2
     # via pytest
