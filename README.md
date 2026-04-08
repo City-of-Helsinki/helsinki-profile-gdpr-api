@@ -104,20 +104,19 @@ If the data deletion isn't allowed, the function has two ways to indicate this:
 
 ## Development
 
-It's good to use a Python virtual environment:
+### Prerequisites
 
-    $> python -m venv venv
-    $> source ./venv/bin/activate
+- [Hatch](https://hatch.pypa.io/latest/install/)
 
-Install development dependencies:
+### Commit message format
 
-    $> pip install -r requirements-dev.txt
+New commit messages must adhere to the [Conventional Commits](https://www.conventionalcommits.org/)
+specification, and line length is limited to 72 characters.
 
-Run tests:
+When [`pre-commit`](https://pre-commit.com/) is in use, [`commitlint`](https://github.com/conventional-changelog/commitlint)
+checks new commit messages for the correct format.
 
-    $> pytest
-
-## Code format
+### Code format
 
 This project uses [Ruff](https://docs.astral.sh/ruff/) for code formatting and quality checking.
 
@@ -132,10 +131,22 @@ Basic `ruff` commands:
 run all the formatting tools as git hooks automatically before a
 commit.
 
-## Commit message format
+### Testing
 
-New commit messages must adhere to the [Conventional Commits](https://www.conventionalcommits.org/)
-specification, and line length is limited to 72 characters.
+Run the tests with:
 
-When [`pre-commit`](https://pre-commit.com/) is in use, [`commitlint`](https://github.com/conventional-changelog/commitlint)
-checks new commit messages for the correct format.
+```
+hatch test
+```
+
+Test all environments in the matrix with:
+
+```
+hatch test -a
+```
+### Available Hatch scripts
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `hatch run test <args>` | Run pytest directly | `hatch run test -k login` |
+| `hatch run lint` | Install and run pre-commit hooks | `hatch run lint` |

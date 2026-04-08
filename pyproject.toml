@@ -1,8 +1,111 @@
 [build-system]
-# These are the assumed default build requirements from pip:
-# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
-requires = ["setuptools>=40.8.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "helsinki-profile-gdpr-api"
+version = "1.0.3"
+description = "Django app for implementing Helsinki profile GDPR API"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "City of Helsinki", email = "dev@hel.fi" },
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+dependencies = [
+    "Django>=5.2",
+    "djangorestframework",
+    "django-helusers",
+    "drf-oidc-auth",
+]
+
+[project.optional-dependencies]
+test = [
+    "coverage[toml]",
+    "factory_boy",
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "python-jose",
+    "requests-mock",
+    "syrupy",
+]
+all = ["helsinki-profile-gdpr-api[test]"]
+
+[project.urls]
+Homepage = "https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api"
+Issues = "https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["helsinki_gdpr"]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "django~=5.2",
+    "pre-commit",
+]
+features = ["all"]
+python = "3.10"
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args}"
+lint = [
+    "pre-commit install",
+    "pre-commit run -a",
+]
+
+[tool.hatch.envs.hatch-test]
+features = ["all"]
+matrix-name-format = "dj{value}"
+parallel = false
+randomize = true
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.10", "3.11"]
+django = ["5.2"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12", "3.13", "3.14"]
+django = ["5.2", "6.0"]
+
+[tool.hatch.envs.hatch-test.overrides]
+matrix.django.dependencies = [
+    { value = "django~={matrix:django}" },
+]
+
+[tool.hatch.envs.hatch-test.scripts]
+run = "pytest{env:HATCH_TEST_ARGS:} {args}"
+run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
+cov-combine = "coverage combine"
+cov-report = "coverage report"
+
+[tool.hatch.envs.hatch-uv]
+dependencies = [
+    "uv>=0.11.1",
+]
+
+[tool.uv]
+exclude-newer = "14 days"
 
 [tool.ruff]
 target-version = "py310"
