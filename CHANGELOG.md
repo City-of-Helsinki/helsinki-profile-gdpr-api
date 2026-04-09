@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.3...v1.1.0) (2026-04-09)
+
+
+### Features
+
+* Migrate build tooling from setuptools/tox to hatch ([926ef59](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/commit/926ef59d30cae730be1bc5f074a1da8bda5ec9b3))
+
 ## [1.0.3](https://github.com/City-of-Helsinki/helsinki-profile-gdpr-api/compare/v1.0.2...v1.0.3) (2026-03-17)
 
 
